@@ -1,0 +1,21 @@
+:root {
+    --clr-title: rgb(245, 245, 245);
+    --clr-subtitle: rgba(245, 245, 245, .5);
+    --clr-text: rgba(245, 245, 245, .8);
+
+    --ff-normal: 'Saira Semi Condensed';
+
+
+
+}
+
+
+*,
+html,
+body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    color-scheme: dark;
+    font-family: var(--ff-normal);
+}
