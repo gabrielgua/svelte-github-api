@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { fade, fly } from "svelte/transition";
+    import { fly } from "svelte/transition";
+	import Tag from "$lib/Tag.svelte";
 
     const REPOS_PER_PAGE = 6
 
@@ -15,6 +16,8 @@
         description: string;
         html_url: string;
         languages: string[];
+        created_at: Date;
+        pushed_at: Date;
     } 
 
     let errorMessage = "";
@@ -25,7 +28,6 @@
 
     const getUser = async () => {
         userProfile = new Profile();
-        userRepos = [];
         errorMessage = "";
         const fetchUser = await fetch(`https://api.github.com/users/${username}`)
         if (!fetchUser.ok) {
@@ -38,8 +40,10 @@
     }
 
     const getRepos = async () => {
-        const fetchRepos = await fetch(`https://api.github.com/users/${username}/repos?per_page=${REPOS_PER_PAGE}&sort=pushed,desc`)
-        const repos: Repo[] = await fetchRepos.json();     
+        userRepos = [];
+        const fetchRepos = await fetch(`https://api.github.com/users/${username}/repos?per_page=${REPOS_PER_PAGE}&sort=pushed`)
+        const repos: Repo[] = await fetchRepos.json();   
+          
           
         repos.forEach(async repo => {
             
@@ -51,7 +55,9 @@
             }
 
             userRepos = [...userRepos, repo];
+            
         })
+
         
 
     }
@@ -85,26 +91,28 @@
         </div>
 
 
+        <div class="repos">
+            <p class="repos__title" in:fly={{x: 30}}>Most recently pushed <span>{userProfile.login}</span>'s repositories</p>
+            {#each userRepos as repo, i}
+                <div class="repo" in:fly={{delay: 100 * i, x: -100}}>
+                    <div class="repo__info">
+                        <div class="ball"></div>
+                        <a href="{repo.html_url}" target="_blank" class="singleline-truncate">{repo.name}</a>
+                    </div>
+                    <p class="repo__desc multiline-truncate">{repo.description != null ? repo.description : 'No description.'}</p>
+                    <div class="repo__langs">
+                        {#each repo.languages as lang}
+                            <Tag>{lang}</Tag>
+                        {/each}
+                    </div>
+                    <div class="repo__dates">
+                        <div class="pushed_date">Last pushed on {new Date(repo.pushed_at).toLocaleDateString()}</div>
+                    </div>
+                </div>
+            {/each}
+        </div>
         
     {/if}
-
-    <div class="repos">
-        {#each userRepos as repo, i}
-            <div class="repo" in:fly={{delay: 100 * i, x: -100}}>
-                <div class="repo__info">
-                    <div class="ball"></div>
-                    <a href="{repo.html_url}" target="_blank" class="singleline-truncate">{repo.name}</a>
-                </div>
-                <p class="repo__desc multiline-truncate">{repo.description != null ? repo.description : 'No description.'}</p>
-                <div class="repo__langs">
-                    {#each repo.languages as lang}
-                        <p class="repo__lang">{lang}</p>
-                    {/each}
-                </div>
-            </div>
-        {/each}
-    </div>
-
 </div>
 
 <style>
@@ -123,7 +131,7 @@
     }
 
     .profile {
-        border: 1px solid rgba(245, 245, 245, .2);
+        border: 1px solid var(--clr-border-subtle);
         display: grid;
         align-items: center;
         grid-template-columns: 1fr 5fr;
@@ -154,14 +162,25 @@
         width: 100%;
     }
 
+    .repos__title {
+        place-self: start;
+        grid-column: span 2;
+
+    }
+
+    .repos__title span {
+        color: var(--clr-primary);
+    }
+
     .repo {
-        border: 1px solid rgba(245, 245, 245, .2);
+        border: 1px solid var(--clr-border-subtle);
         padding: .75rem 1rem 1rem;
         display: flex;
         flex-direction: column;
-        gap: .25rem;
+        gap: .5rem;
         border-radius: .5rem 0rem;
         color: var(--clr-subtitle);
+        font-size: var(--fs-normal);
     }
 
     .repo__info {
@@ -180,7 +199,7 @@
     .repo__info a {
         text-decoration: none;
         color: var(--clr-accent);
-        font-size: large;
+        font-size: var(--fs-medium);
     }
 
     .repo a:hover {
@@ -194,12 +213,8 @@
         flex-wrap: wrap;
     }
 
-    .repo__lang {
-        border-radius: .25rem;
-        padding-inline: .25rem;
-        max-width: max-content;
-        background-color: rgba(var(--clr-primary-rgb), .5);
-        color: white;
+    .repo__dates {
+        font-size: var(--fs-small);
     }
 
     .multiline-truncate {

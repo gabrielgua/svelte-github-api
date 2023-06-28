@@ -4,9 +4,10 @@
     --clr-text: rgba(245, 245, 245, .8);
 
     --fs-xx-large: 2rem;
-    --fs-normal: 1rem; 
+    --fs-normal: .9rem; 
+    --fs-small: .8rem;
 
-    --ff-normal: 'Saira Semi Condensed';
+    --ff-normal: 'Inter', sans-serif;
 
     /* --clr-bg: #000f1a; */
     --clr-primary: #64CCC5;
@@ -14,6 +15,8 @@
     --clr-accent: #DAFFFB;
 
     --clr-primary-rgb: 100, 204, 197;
+
+    --clr-border-subtle: rgba(245, 245, 245, .1);
 
 }
 
