@@ -1,11 +1,19 @@
 :root {
     --clr-title: rgb(245, 245, 245);
-    --clr-subtitle: rgba(245, 245, 245, .5);
+    --clr-subtitle: rgba(245, 245, 245, .7);
     --clr-text: rgba(245, 245, 245, .8);
+
+    --fs-xx-large: 2rem;
+    --fs-normal: 1rem; 
 
     --ff-normal: 'Saira Semi Condensed';
 
+    /* --clr-bg: #000f1a; */
+    --clr-primary: #64CCC5;
+    --clr-secondary: #176B87;
+    --clr-accent: #DAFFFB;
 
+    --clr-primary-rgb: 100, 204, 197;
 
 }
 
