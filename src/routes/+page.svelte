@@ -76,8 +76,8 @@
 <div class="container">
     <p class="title">Github profile</p>
 
-    <form on:submit|preventDefault={getUser}>
-        <input class="search__input" type="text" name="username" bind:value={username} placeholder="🔍 Search with github username" />
+    <form on:submit={getUser}>
+        <input class="search__input" type="text" bind:value={username} placeholder="🔍 Search with github username" />
         <button class="search__btn" type="submit">Search</button>
     </form>            
 
